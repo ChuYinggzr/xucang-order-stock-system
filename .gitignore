@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+instance/
+demo_accounts.txt
+.pytest_cache/
+test-results/
+local-notes/
+docs/学习与验收.md
+docs/screenshots/工作台预览.jpg
+docs/screenshots/工作台-商务版.jpg
+docs/screenshots/商品页-商务版.jpg
+docs/screenshots/登录页-商务版.jpg

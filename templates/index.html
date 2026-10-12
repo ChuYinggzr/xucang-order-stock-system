@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>序仓 · 订单与库存管理</title>
+  <link rel="stylesheet" href="/static/style.css?v=20261012-business">
+  <link rel="stylesheet" href="/static/business.css?v=20261012-business">
+  <script src="/static/app.js?v=20261012-business" defer></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="icon-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="icon-package" viewBox="0 0 24 24"><path d="m12 3 9 5v8l-9 5-9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8M7.5 5.5l9 5"/></symbol>
+    <symbol id="icon-orders" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="icon-history" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.6 7.4M3 4v7h7M12 7v5l3 2"/></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7a8 8 0 0 0-14-2L3 8M3 3v5h5M4 17a8 8 0 0 0 14 2l3-3M16 16h5v5"/></symbol>
+    <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M13 8l4 4-4 4M8 12h13"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-bag" viewBox="0 0 24 24"><path d="M5 7h14l1 14H4ZM8 8V6a4 4 0 0 1 8 0v2"/></symbol>
+  </defs></svg>
+  <section id="auth-screen" class="auth-screen">
+    <div class="auth-story">
+      <a class="brand" href="/"><span class="brand-mark">序</span><span>序仓<span class="brand-sub">ORDER & STOCK</span></span></a>
+      <p class="eyebrow">订单与库存管理</p>
+      <h1>业务有序，<br>数据清楚。</h1>
+      <p class="story-copy">在一个工作台中管理商品、库存和订单。<br>从入库到交付，每一步都清晰可查。</p>
+      <div class="flow-visual"><span><small>01</small>商品入库</span><b>→</b><span><small>02</small>订单流转</span><b>→</b><span><small>03</small>完成交付</span></div>
+      <div class="story-footer"><span>商品管理</span><span>库存追溯</span><span>订单统计</span></div>
+    </div>
+    <div class="auth-side">
+      <div class="auth-card">
+        <p class="eyebrow">欢迎来到序仓</p><h2 id="auth-title">登录你的工作台</h2>
+        <p class="muted" id="auth-description">登录后，开始管理订单与商品。</p>
+        <div class="segmented"><button type="button" id="login-tab" class="selected">登录</button><button type="button" id="register-tab">注册</button></div>
+        <form id="auth-form">
+          <label>用户名<input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="输入用户名"></label>
+          <label>密码<input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required placeholder="至少 8 个字符"></label>
+          <p class="form-error" id="auth-error" role="alert"></p>
+          <button type="submit" class="primary full" id="auth-submit">进入工作台 <span>→</span></button>
+        </form>
+        <p class="auth-tip" id="auth-tip">注册账号可以浏览商品、下单和管理自己的订单。</p>
+      </div>
+      <p class="footnote">序仓 · 让业务井然有序</p>
+    </div>
+  </section>
+
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">序</span><span>序仓<span class="brand-sub">ORDER & STOCK</span></span></a>
+      <p class="nav-caption">工作空间</p>
+      <nav id="navigation">
+        <button data-view="overview" class="nav-button active"><svg class="icon" aria-hidden="true"><use href="#icon-overview"/></svg>工作概览</button>
+        <button data-view="products" class="nav-button"><svg class="icon" aria-hidden="true"><use href="#icon-package"/></svg>商品与库存</button>
+        <button data-view="orders" class="nav-button"><svg class="icon" aria-hidden="true"><use href="#icon-orders"/></svg>订单管理</button>
+        <button data-view="movements" class="nav-button admin-only"><svg class="icon" aria-hidden="true"><use href="#icon-history"/></svg>库存流水</button>
+      </nav>
+      <div class="sidebar-note"><span class="status-dot"></span>本机演示工作台<p>付款仅为流程模拟。</p></div>
+      <div class="profile"><span id="avatar" class="avatar">U</span><div><b id="profile-name"></b><span id="profile-role"></span></div><button id="logout" aria-label="退出登录" title="退出登录"><svg class="icon" aria-hidden="true"><use href="#icon-logout"/></svg></button></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><span class="breadcrumb">工作空间 / </span><span id="breadcrumb-title">工作概览</span></div><span id="today"></span></header>
+      <div class="content">
+        <div class="page-heading"><div><p class="eyebrow" id="page-eyebrow">OVERVIEW</p><h1 id="page-title">工作概览</h1><p class="muted" id="page-description"></p></div><button id="refresh" class="secondary"><svg class="icon" aria-hidden="true"><use href="#icon-refresh"/></svg>刷新数据</button></div>
+
+        <section id="view-overview" class="view">
+          <div class="metrics" id="metrics"></div>
+          <div class="overview-grid"><section class="panel"><div class="panel-heading"><h2>订单进展</h2><span class="muted">当前状态分布</span></div><div id="status-bars"></div></section><section class="panel"><div class="panel-heading"><h2 id="attention-title">需要关注</h2><span class="pill">工作提醒</span></div><div id="attention"></div></section></div>
+          <section class="panel"><div class="panel-heading"><h2>最近的订单</h2><button class="text-button" data-go="orders">查看全部 →</button></div><div id="recent-orders"></div></section>
+        </section>
+
+        <section id="view-products" class="view" hidden>
+          <div class="toolbar"><form id="product-search" class="search-form"><input name="q" placeholder="搜索商品名称或 SKU" maxlength="80"><select name="active" class="admin-only"><option value="">全部上架状态</option><option value="1">已上架</option><option value="0">已下架</option></select><button class="secondary">搜索</button></form><button id="new-product" class="primary admin-only"><svg class="icon" aria-hidden="true"><use href="#icon-plus"/></svg>新建商品</button><button id="open-cart" class="secondary"><svg class="icon" aria-hidden="true"><use href="#icon-bag"/></svg>购物清单 <span id="cart-count">0</span></button></div>
+          <div id="products-grid" class="products-grid"></div><div id="products-pagination" class="pagination"></div>
+        </section>
+
+        <section id="view-orders" class="view" hidden>
+          <form id="order-search" class="toolbar search-form"><input name="q" maxlength="80" placeholder="搜索订单编号"><select name="status"><option value="">全部订单状态</option><option value="pending">待付款</option><option value="paid">待发货</option><option value="shipped">待收货</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select><input type="date" name="from" aria-label="开始日期"><span>至</span><input type="date" name="to" aria-label="结束日期"><button class="secondary">筛选</button></form>
+          <div class="panel" id="orders-table"></div><div id="orders-pagination" class="pagination"></div>
+        </section>
+
+        <section id="view-movements" class="view" hidden>
+          <form id="movement-search" class="toolbar search-form"><input type="number" name="product_id" min="1" placeholder="按商品编号筛选"><button class="secondary">筛选</button></form>
+          <div class="panel" id="movements-table"></div><div id="movements-pagination" class="pagination"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <dialog id="modal"><div class="modal-heading"><h2 id="modal-title"></h2><button id="close-modal" class="icon-button" aria-label="关闭">×</button></div><div id="modal-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
